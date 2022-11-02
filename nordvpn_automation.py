@@ -67,9 +67,13 @@ if __name__ == "__main__":
     logging.info(f"Will roll the proxy config at {randomized_time}")
 
     while True:
-        if datetime.now() >= randomized_time:
-            rotate_configuration(connection_list)
-            randomized_time = datetime.now() + timedelta(minutes=random.randrange(1,int(args.refresh_rate)))
-            logging.info(f"Will roll the proxy config at {randomized_time}")
+        try:
+            if datetime.now() >= randomized_time:
+                rotate_configuration(connection_list)
+                randomized_time = datetime.now() + timedelta(minutes=random.randrange(1,int(args.refresh_rate)))
+                logging.info(f"Will roll the proxy config at {randomized_time}")
+            sleep(1)
 
-        sleep(1)
+        except KeyboardInterrupt:
+            disconnect_configurations()
+            break
